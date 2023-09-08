@@ -1,0 +1,31 @@
+{
+  "name": "311RequestSearch",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "preinstall": "cd client && npm install",
+    "build:server:Debug": "dotnet build -c Debug",
+    "build:server:Release": "dotnet build -c Release",
+    "build:container:Debug": "./docker-build.sh -t 311RequestSearch --build-arg CONFIGURATION=Debug",
+    "build:container:Release": "./docker-build.sh -t 311RequestSearch --build-arg CONFIGURATION=Release",
+    "publish:Debug": "dotnet publish -c Debug -o out",
+    "prepublish:Release": "npm run clean:all",
+    "publish:Release": "dotnet publish -c Release -o out",
+    "start:publish": "cd out && ASPNETCORE_URLS=\"http://dev.localdev.tcpci.com:9000\" dotnet 311RequestSearch.dll",
+    "clean:publish": "rimraf out",
+    "clean:client:spa": "rimraf spa/**",
+    "clean:client": "run-p clean:client:*",
+    "clean:server": "dotnet clean",
+    "clean:all": "run-p clean:publish clean:client clean:server",
+    "copy:build": "cpr \"client/build/\" \"spa/\" --delete-first",
+    "echo:creation": "echo \"Generated on 09/08/2023 with Armored Armadillo 1.0.0-dev\""
+  },
+  "author": "Tyler Technologies",
+  "license": "ISC",
+  "devDependencies": {
+    "cpr": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {}
+}

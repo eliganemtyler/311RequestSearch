@@ -1,0 +1,99 @@
+{
+    "version": "0.2.0",
+    "compounds": [
+        {
+            "name": "ASP.Net Core & Chrome",
+            "configurations": [".NET Core Launch", "Launch Chrome & Client Server"]
+        },
+        {
+            "name": "ASP.Net Core & Firefox",
+            "configurations": [".NET Core Launch", "Launch Firefox & Client Server"]
+        },
+        {
+            "name": "Live Reload All",
+            "configurations": [".Net Core Watch"],
+            "preLaunchTask": "ng serve"
+        },
+    ],
+    "configurations": [
+        {
+            "name": ".NET Core Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build dotnet core",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/311RequestSearch.dll",
+            "args": [
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        },
+        {
+            "name": ".Net Core Watch",
+            "request": "launch",
+            "type": "DotNetAutoAttach",
+            "args": [],
+            "env": {
+                "CLIENT_DEV_SERVER_PORT": "4200",
+                "ASPNETCORE_URLS": "http://dev.localdev.tcpci.com:5000",
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "Launch Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Launch Firefox",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Launch Edge",
+            "type": "edge",
+            "request": "launch",
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Launch Chrome & Client Server",
+            "type": "chrome",
+            "request": "launch",
+            "preLaunchTask": "ng serve",
+            "postDebugTask": "kill all tasks",
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Launch Firefox & Client Server",
+            "type": "firefox",
+            "request": "launch",
+            "preLaunchTask": "ng serve",
+            "postDebugTask": "kill all tasks",
+            "reAttach": true,
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        },
+        {
+            "name": "Launch Edge & Client Server",
+            "type": "edge",
+            "request": "launch",
+            "preLaunchTask": "ng serve",
+            "postDebugTask": "kill all tasks",
+            "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+            "webRoot": "${workspaceFolder}/client"
+        }
+    ]
+}

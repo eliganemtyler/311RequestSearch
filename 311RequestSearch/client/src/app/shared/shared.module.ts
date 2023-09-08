@@ -1,0 +1,17 @@
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { RouterModule } from '@angular/router';
+
+
+@NgModule({
+  declarations: [FooterComponent, HeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule
+  ],
+  exports: [ FooterComponent, HeaderComponent ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class SharedModule { }

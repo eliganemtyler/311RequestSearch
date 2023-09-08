@@ -1,0 +1,61 @@
+version: 2
+registries:
+  npm-artifactory:
+    type: npm-registry
+    url: https://tylertech.jfrog.io/artifactory/api/npm/npm
+    username: ${{secrets.DEPENDABOT_ARTIFACTORY_USERNAME}}
+    password: ${{secrets.DEPENDABOT_ARTIFACTORY_PASSWORD}}
+  nuget-artifactory:
+    type: nuget-feed
+    url: https://tylertech.jfrog.io/artifactory/api/nuget/v3/nuget
+    username: ${{secrets.DEPENDABOT_ARTIFACTORY_USERNAME}}
+    password: ${{secrets.DEPENDABOT_ARTIFACTORY_PASSWORD}}
+  docker-artifactory:
+    type: docker-registry
+    url: https://tylertech-docker.jfrog.io
+    username: ${{secrets.DEPENDABOT_ARTIFACTORY_USERNAME}}
+    password: ${{secrets.DEPENDABOT_ARTIFACTORY_PASSWORD}}
+updates:
+  - package-ecosystem: npm 
+    directory: "/" 
+    schedule:
+      interval: "weekly"
+    # remove this line if you want PRs for all updates, not just security alerts
+    open-pull-requests-limit: 0
+    versioning-strategy: lockfile-only
+    registries:
+      - npm-artifactory
+  - package-ecosystem: npm 
+    directory: "/311RequestSearch"
+    schedule:
+      interval: "weekly"
+    # remove this line if you want PRs for all updates, not just security alerts
+    open-pull-requests-limit: 0
+    versioning-strategy: lockfile-only
+    registries:
+      - npm-artifactory
+  - package-ecosystem: npm 
+    directory: "/311RequestSearch/client"
+    schedule:
+      interval: "weekly"
+    # remove this line if you want PRs for all updates, not just security alerts
+    open-pull-requests-limit: 0
+    versioning-strategy: lockfile-only
+    registries:
+      - npm-artifactory
+  - package-ecosystem: nuget
+    directory: "/311RequestSearch"
+    schedule:
+      interval: "weekly"
+    # remove this line if you want PRs for all updates, not just security alerts
+    open-pull-requests-limit: 0
+    registries:
+      - nuget-artifactory
+  - package-ecosystem: docker
+    directory: "/311RequestSearch"
+    schedule:
+      interval: "weekly"
+    # remove this line if you want PRs for all updates, not just security alerts
+    open-pull-requests-limit: 0
+    registries:
+      - docker-artifactory

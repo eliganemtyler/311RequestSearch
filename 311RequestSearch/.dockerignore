@@ -1,0 +1,15 @@
+# server ignore
+/bin
+/logs
+/obj
+/out
+/spa
+/wwwroot/vendor
+
+# client ignore
+/client/build
+/client/documentation
+
+# all ignore
+**/node_modules
+**/.vscode

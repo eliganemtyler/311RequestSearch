@@ -1,0 +1,13 @@
+.center {
+  max-width: 1000px;
+  margin: 24px auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}

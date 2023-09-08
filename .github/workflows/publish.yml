@@ -1,0 +1,123 @@
+name: Build
+on:
+  pull_request:
+    paths:
+      - '311RequestSearch/**'
+      - '311RequestSearch.sln'
+      - '.github/workflows/**'
+      - 'build-scripts/**'
+      #- 'continuous-deployment/**'
+  push:
+    branches:
+      - main
+    paths:
+      - '311RequestSearch/**'
+      - '311RequestSearch.sln'
+      - '.github/workflows/**'
+      - 'build-scripts/**'
+      #- 'continuous-deployment/**'
+concurrency:
+  group: publish-${{ github.event.pull_request.head.sha || github.event_name }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    steps:
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v3
+        if: ${{ github.event_name == 'push' }}
+        with:
+          fetch-depth: 0
+      - name: Determine next version
+        uses: paulhatch/semantic-version@v5.0.3
+        id: semver
+        if: ${{ github.event_name == 'push' }}
+        with:
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          version_format: "${major}.${minor}.${patch}"
+          change_path: 311RequestSearch
+      - name: Get branch
+        id: getbranch
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          echo "branch=${GITHUB_HEAD_REF#refs/heads/}" >> $GITHUB_OUTPUT
+          echo "safebranch=$(echo -n "${GITHUB_HEAD_REF#refs/heads/}" | tr -c '[:alnum:]-' '-' | tr A-Z a-z)" >> $GITHUB_OUTPUT
+      - name: Determine next version (PR)
+        uses: paulhatch/semantic-version@v5.0.3
+        id: semverpr
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          tag_prefix: ${{ steps.getbranch.outputs.safebranch }}-v
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          version_format: "${major}.${minor}.${patch}"
+          change_path: 311RequestSearch
+      - name: Run publish.sh
+        if: ${{ steps.semver.outputs.changed || steps.semverpr.outputs.changed }}
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "GitHub Actions"
+          chmod +x build-scripts/publish.sh
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            ./build-scripts/publish.sh --publish --version=${{ steps.semver.outputs.version }}
+          else
+            branchlower=$(echo -n "${GITHUB_HEAD_REF#refs/heads/}" | tr -c '[:alnum:]-' '-' | tr A-Z a-z)
+            ./build-scripts/publish.sh --publish --version=${{ steps.getbranch.outputs.safebranch }}-v${{ steps.semverpr.outputs.version }}
+          fi
+      - if: ${{ steps.semver.outputs.changed || steps.semverpr.outputs.changed }}
+        run: |
+          cat <<\EOF > xray-scan.yml
+          images:
+            - ${{ env.IMAGE_TAG }}
+          EOF
+      - if: ${{ steps.semver.outputs.changed || steps.semverpr.outputs.changed }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: xray-scan.yml
+          path: xray-scan.yml
+          retention-days: 7
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        if: ${{ github.event_name == 'push' && steps.semver.outputs.changed }} 
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v${{ steps.semver.outputs.version }}"
+          allowUpdates: false
+          body: |           
+            ${{ github.event.head_commit.message }}
+
+            [${{ env.ARTIFACTORY_PULL_REGISTRY }}/311RequestSearch:${{ steps.semver.outputs.version }}](https://tylertech.jfrog.io/ui/packages/docker:%2F%2F311RequestSearch)
+          draft: false
+          prerelease: false
+      # - name: Trigger Harness
+      #   if: ${{ github.event_name == 'push' }}
+      #   env:
+      #     HARNESS_WEBHOOK: ${{ secrets.HARNESS_WEBHOOK }}
+      #     HARNESS_WEBHOOK_APPLICATION: ${{ secrets.HARNESS_WEBHOOK_APPLICATION }}
+      #   run: |
+      #     git fetch --tags
+      #     TAG=$(git describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*")
+      #     TAG=${TAG:1}
+      # Use only one of the following curl commands
+      # This curl command does _not_ include the service parameter
+      #     curl -X POST -H 'content-type: application/json' --url "$HARNESS_WEBHOOK" -d '{"application":"'"$HARNESS_WEBHOOK_APPLICATION"'","artifacts":[{"service":"'"$HARNESS_SERVICE"'","buildNumber":"'"$TAG"'"}]}'
+      # This curl command includes the service parameter
+      #     curl -X POST -H 'content-type: application/json' --url "$HARNESS_WEBHOOK" -d '{"application":"'"$HARNESS_WEBHOOK_APPLICATION"'","parameters":{"service":"'"$HARNESS_SERVICE"'"},"artifacts":[{"service":"'"$HARNESS_SERVICE"'","buildNumber":"'"$TAG"'"}]}'
+    env:
+      ARTIFACTORY_PULL_REGISTRY: "${{ secrets.ARTIFACTORY_PULL_REGISTRY }}"
+      ARTIFACTORY_NUGET_REGISTRY: "${{ secrets.TEAM_ARTIFACTORY_NUGET_REGISTRY }}"
+      ARTIFACTORY_NPM_REGISTRY: "${{ secrets.TEAM_ARTIFACTORY_NPM_REGISTRY }}"
+      ARTIFACTORY_PUSH_REGISTRY: "${{ secrets.TEAM_ARTIFACTORY_PUSH_REGISTRY }}"
+      ARTIFACTORY_USERNAME: "${{ secrets.TEAM_ARTIFACTORY_USERNAME }}"
+      ARTIFACTORY_PASSWORD: "${{ secrets.TEAM_ARTIFACTORY_PASSWORD }}"
+      ARTIFACTORY_TOKEN: "${{ secrets.TEAM_ARTIFACTORY_TOKEN }}"
+      DOCKER_BUILDKIT: "1"
+      #HARNESS_SERVICE: "your-harness-service"

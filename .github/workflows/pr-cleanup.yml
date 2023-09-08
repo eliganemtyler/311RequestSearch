@@ -1,0 +1,39 @@
+name: Pull request cleanup
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - '311RequestSearch/**'
+      - '311RequestSearch.sln'
+      - '.github/workflows/**'
+      - 'build-scripts/**'
+      #- 'continuous-deployment/**'
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: jfrog/setup-jfrog-cli@v1
+        with:
+          version: 1.48.0
+      - name: Remove image and tag
+        run: |
+          jfrog config add tylertech --artifactory-url="https://tylertech.jfrog.io/artifactory" --user="$ARTIFACTORY_USERNAME" --apikey="$ARTIFACTORY_PASSWORD" --interactive=false
+          branchlower=$(echo -n "${GITHUB_HEAD_REF#refs/heads/}" | tr -c '[:alnum:]-' '-' | tr A-Z a-z)
+          versionTag="$branchlower-v*"
+          imageTag=${ARTIFACTORY_PUSH_REGISTRY#tylertech-}
+          imageTag="${imageTag%.jfrog.io}/$IMAGE_NAME/$versionTag"
+          jfrog rt del --quiet "$imageTag"
+          tags=$(git tag -l "$versionTag")
+          if [ -n "$tags" ]; then
+            echo "removing tags: $tags"
+            git push origin --delete $tags
+          fi
+    env:
+      IMAGE_NAME: "311RequestSearch"
+      ARTIFACTORY_PUSH_REGISTRY: "${{ secrets.TEAM_ARTIFACTORY_PUSH_REGISTRY }}"
+      ARTIFACTORY_USERNAME: "${{ secrets.TEAM_ARTIFACTORY_USERNAME }}"
+      ARTIFACTORY_PASSWORD: "${{ secrets.TEAM_ARTIFACTORY_PASSWORD }}"

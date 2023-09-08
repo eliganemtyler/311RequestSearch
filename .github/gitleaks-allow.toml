@@ -1,0 +1,5 @@
+[AllowList]
+  Regexes = [
+    '''TokenClientScope = "PlatformServiceSDKClients"''',
+    '''SecretsId>311RequestSearch-'''
+  ]

@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.app-body {
+  overflow: auto;
+  display: grid;
+  grid-template-rows: 1fr auto;
+
+  tyl-footer {
+    grid-row: 2;
+  }
+}

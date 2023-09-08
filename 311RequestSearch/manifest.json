@@ -1,0 +1,9 @@
+{
+  "ManifestID": "dapper-app",
+  "ApplicationName": "311RequestSearch",
+  "product": "dapper",
+  "ApplicationType": "Citizen",
+  "licenseKey": "everyone",
+  "IntentFilters": [
+  ]
+}

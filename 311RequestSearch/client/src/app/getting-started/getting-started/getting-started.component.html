@@ -1,0 +1,29 @@
+<div class="getting-started-page">
+  <forge-card outlined class="getting-started-center">
+    <div class="title-container forge-typography--title">
+      <img class="getting-started-image" src="assets/images/tyler-icon.svg">
+      <h2 style="flex: 1 1 auto; text-align: center;">{{applicationName}}</h2>
+    </div>
+    <forge-list>
+      <h2 class="forge-typography--subtitle1" i18n="quick start header|Header for how to get started with this template@@quickStartHeader">Quick Start</h2>
+      <forge-list-item>
+        <i class="tyler-icons" slot="leading">insert_drive_file</i>
+        <span>Read the <a target="_blank" href="https://github.com/tyler-technologies/tcpweb-accelerator-core/blob/master/README.md">readme</a></span>
+      </forge-list-item>
+      <forge-divider></forge-divider>
+      <h2 class="forge-typography--subtitle1">Omnibar</h2>
+      <forge-list-item>
+        <i class="tyler-icons" slot="leading">apps</i>
+        <span>Omnibar configuration and information <a target="_blank" href="https://forge.tylertech.com/components/omnibar/implementation">here</a></span>
+      </forge-list-item>
+      <forge-divider></forge-divider>
+  </forge-list>
+
+    <forge-button>
+      <button type="button" routerLink="/app-config">
+        <i class="tyler-icons" aria-hidden="true">settings</i>
+        <span>View Current Configuration</span>
+      </button>
+    </forge-button>
+  </forge-card>
+</div>

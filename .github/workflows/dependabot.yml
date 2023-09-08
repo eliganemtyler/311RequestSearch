@@ -1,0 +1,23 @@
+name: Dependabot build
+on:
+  pull_request_target:
+
+jobs:
+  dependabot-build:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Run publish.sh
+        run: |
+          ./build-scripts/publish.sh --version=0.0.1-dependabot
+    env:
+      ARTIFACTORY_PULL_REGISTRY: "${{ secrets.ARTIFACTORY_PULL_REGISTRY }}"
+      ARTIFACTORY_PUSH_REGISTRY: "${{ secrets.SCRATCH_ARTIFACTORY_PUSH_REGISTRY }}"
+      ARTIFACTORY_USERNAME: "${{ secrets.DEPENDABOT_ARTIFACTORY_USERNAME }}"
+      ARTIFACTORY_PASSWORD: "${{ secrets.DEPENDABOT_ARTIFACTORY_PASSWORD }}"
+      ARTIFACTORY_TOKEN: "${{ secrets.DEPENDABOT_ARTIFACTORY_TOKEN }}"
+      DOCKER_BUILDKIT: "1"

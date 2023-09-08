@@ -1,0 +1,12 @@
+@use '@tylertech/forge/dist/forge-core.css';
+@use '@tylertech/forge/dist/forge.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+router-outlet {
+  display: none;
+}
