@@ -1,5 +1,4 @@
 import { Component, Inject } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 import { map } from 'rxjs/operators';
 import {
   IMenuOption,
@@ -12,8 +11,9 @@ import { tylIconTylerTalkingTLogo } from '@tylertech/tyler-icons/custom';
 import { Config } from 'src/app/core/models/config';
 import { APP_CONFIG, IDENTITY } from 'src/app/app.tokens';
 import { localeLanguageMap, SupportedLocales } from 'src/app/app.locales';
-import { AppLauncherService } from 'src/app/core/services/app-launcher.service';
 import { IProfile } from 'src/identity-helper';
+import { AppService } from 'src/app/app.service';
+import { CookieService } from 'ngx-cookie-service';
 
 const userLocaleCookie = '.User.Locale';
 
@@ -21,12 +21,11 @@ const userLocaleCookie = '.User.Locale';
  * Header component
  */
 @Component({
-  selector: 'tyl-header',
+  selector: 'app-header',
   styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html'
 })
 export class HeaderComponent {
-  public title = '311RequestSearch';
   public isSignedIn: boolean;
   public profile: IProfile | null;
   public languageOptions: IMenuOption[];
@@ -37,30 +36,28 @@ export class HeaderComponent {
   public constructor(
     @Inject(APP_CONFIG) private readonly _config: Config,
     @Inject(IDENTITY) private readonly _user: AppUser,
-    private _cookieService: CookieService,
-    private _appLauncherService: AppLauncherService
+    private cookieService: CookieService,
   ) {
     IconRegistry.define(tylIconTylerTalkingTLogo);
-    this.title = this._config.title;
     this.isSignedIn = this._user.isSignedIn;
     this.profile = this._user.profile;
 
     // setup language switcher menu options
     const defaultLocale = this._config.defaultLanguage;
-    const currentLocale = this._cookieService.get(userLocaleCookie) || defaultLocale;
+    const currentLocale = this.cookieService.get(userLocaleCookie) || defaultLocale;
     this.languageOptions = (localeLanguageMap[currentLocale as SupportedLocales] || localeLanguageMap[defaultLocale])
       .map(({ locale: value, label }) => ({ value, label, selected: value === currentLocale }));
   }
 
-  public omnibarLauncherOptions: AppLauncherOptionsCallback = () => this._appLauncherService.getIntents().pipe(
-    map((result: IAppLauncherOption[]) => ({ options: result }))
-  )
-    .toPromise();
+  // public omnibarLauncherOptions: AppLauncherOptionsCallback = () => this.appService.getIntents().pipe(
+  //   map((result: IAppLauncherOption[]) => ({ options: result }))
+  // )
+  //   .toPromise();
 
   public languageSelected = (data: IMenuSelectEventData): void => {
     const today = new Date();
     const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
-    this._cookieService.set(
+    this.cookieService.set(
       userLocaleCookie,
       data.value,
       nextYear,

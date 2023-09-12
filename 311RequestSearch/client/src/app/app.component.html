@@ -1,9 +1,12 @@
 <forge-scaffold>
-  <tyl-header slot="header"></tyl-header>
+  <app-header slot="header"></app-header>
+  <forge-drawer app-menu slot="body-left" [type]="appService.menu.type">
+    <!-- <app-menu></app-menu> -->
+  </forge-drawer>
 
-  <main slot="body" class="app-body">
+  <!-- <app-menu slot="footer"></app-menu> -->
+
+  <!-- <main slot="body" class="app-body">
     <router-outlet></router-outlet>
-
-    <tyl-footer></tyl-footer>
-  </main>
+  </main> -->
 </forge-scaffold>

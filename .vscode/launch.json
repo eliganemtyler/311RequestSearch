@@ -25,7 +25,7 @@
       "name": "Launch Chrome",
       "type": "chrome",
       "request": "launch",
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     },
     {
@@ -33,14 +33,14 @@
       "type": "firefox",
       "request": "launch",
       "reAttach": true,
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     },
     {
       "name": "Launch Edge",
       "type": "edge",
       "request": "launch",
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     },
     {
@@ -49,7 +49,7 @@
       "request": "launch",
       "preLaunchTask": "ng serve",
       "postDebugTask": "kill all tasks",
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     },
     {
@@ -59,7 +59,7 @@
       "preLaunchTask": "ng serve",
       "postDebugTask": "kill all tasks",
       "reAttach": true,
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     },
     {
@@ -68,7 +68,7 @@
       "request": "launch",
       "preLaunchTask": "ng serve",
       "postDebugTask": "kill all tasks",
-      "url": "http://dev.localdev.tcpci.com:5000/app/new-application",
+      "url": "http://dev.localdev.tcpci.com:5000/requestsearch/request-search",
       "webRoot": "${workspaceFolder}/311RequestSearch/client"
     }
   ]

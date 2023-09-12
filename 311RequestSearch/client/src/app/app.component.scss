@@ -1,15 +1,14 @@
+@use 'src/global' as *;
+
 :host {
   display: block;
-  height: 100%;
-  width: 100%;
 }
 
-.app-body {
-  overflow: auto;
+[slot='body'] {
   display: grid;
-  grid-template-rows: 1fr auto;
+  @include forge-theme-property(background-color, background);
+}
 
-  tyl-footer {
-    grid-row: 2;
-  }
+forge-drawer {
+  --forge-drawer-width: auto;
 }

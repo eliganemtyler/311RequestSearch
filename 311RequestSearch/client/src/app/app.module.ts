@@ -1,28 +1,53 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import '@angular/localize/init';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GettingStartedModule } from './getting-started/getting-started.module';
-import { SharedModule } from './shared/shared.module';
+import { Router } from '@angular/router';
+import { AppService } from './app.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MenuComponent } from './shared/components/menu/menu.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 
+const initializeAppFactory = (
+  router: Router,
+  appService: AppService
+) => () => { }; //todo
+// new Promise<void>((resolve, reject) => {
+//   appService.getCurrentUser().subscribe({
+//     next: () => {
+//       appService.hasAccess = true;
+//       resolve();
+//     },
+//     error: () => {
+//       router.navigate(['unauthorized']);
+//       resolve();
+//     }
+//   });
+// }
+// );
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    CoreModule.forRoot(),
-    SharedModule,
-    GettingStartedModule,
+    BrowserAnimationsModule],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeAppFactory,
+      multi: true,
+      deps: [Router, AppService]
+    }
   ],
-  providers: [],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

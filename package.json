@@ -1,7 +1,8 @@
 {
-  "name": "311RequestSearch",
+  "name": "tyler-311-request-search",
   "version": "3.0.0",
   "scripts": {
+    "start": "cd ./311RequestSearch/client && npm start",
     "postinstall": "cd 311RequestSearch && npm i",
     "build:Debug": "dotnet build -c Debug",
     "build:Release": "dotnet build -c Release",

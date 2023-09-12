@@ -1,0 +1,15 @@
+<forge-app-bar title-text="Request Search">
+  <forge-icon slot="logo" name="tyler_talking_t_logo"></forge-icon>
+  <!-- <forge-app-bar-app-launcher-button slot="end" [optionsCallback]="omnibarLauncherOptions"></forge-app-bar-app-launcher-button> -->
+  <forge-menu slot="end" [options]="languageOptions" (forge-menu-select)="languageSelected($any($event).detail)">
+    <forge-icon-button>
+      <button type="button" class="tyler-icons">
+        <forge-icon name="translate"></forge-icon>
+      </button>
+    </forge-icon-button>
+  </forge-menu>
+  <forge-button slot="end" *ngIf="!isSignedIn">
+    <button type="button" class="signin-button" (click)="signIn()">Sign In</button>
+  </forge-button>
+  <forge-app-bar-profile-button slot="end" *ngIf="isSignedIn" [avatarText]="profile?.fullName" [fullName]="profile?.fullName" [email]="profile?.email" (forge-profile-card-sign-out)="signOut()"></forge-app-bar-profile-button>
+</forge-app-bar>

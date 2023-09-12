@@ -9,13 +9,13 @@ export interface OmnibarSettings {
 export interface DatadogRum {
   config: RumUserConfiguration;
 }
-export interface IOneTrustConfig {
+export interface IOneTrustConfig { //delete
   src: string;
   dataDomainScript: string;
   maxWaitTime?: number;
 }
 
-export interface Config {
+export interface Config { //probably only using this
   title: string;
   defaultLanguage: string;
   version: string;
@@ -27,7 +27,7 @@ export interface Config {
   oneTrustConfig: IOneTrustConfig;
 }
 
-export interface IFooterLink {
+export interface IFooterLink { //probably delete
   name: string,
   url: string
 }

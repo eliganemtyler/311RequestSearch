@@ -16,41 +16,8 @@ import { bootstrapIdentity } from './bootstrap-identity';
 import { BootstrapParameters, bootstrapTylerWebApp } from './bootstrap-tyler-webapp';
 import { deleteCookie } from './bootstrap-helpers';
 
-import {
-  defineCardComponent,
-  defineButtonComponent,
-  defineDividerComponent,
-  defineIconButtonComponent,
-  defineIconComponent,
-  defineListComponent,
-  defineMenuComponent,
-  defineAppBarComponent,
-  defineAppBarProfileButtonComponent,
-  defineScaffoldComponent,
-} from '@tylertech/forge';
-
-import {
-  defineFooterComponent,
-  defineAppLauncherButtonComponent
-} from '@tylertech/forge-internal';
-
-const forgeComponents = [
-  defineCardComponent,
-  defineButtonComponent,
-  defineDividerComponent,
-  defineIconButtonComponent,
-  defineIconComponent,
-  defineListComponent,
-  defineMenuComponent,
-  defineAppBarComponent,
-  defineAppBarProfileButtonComponent,
-  defineScaffoldComponent
-];
-
-const forgeInternalComponents = [
-  defineFooterComponent,
-  defineAppLauncherButtonComponent
-];
+import { defineComponents } from './define-components';
+import { defineIcons } from './define-icons';
 
 declare global {
   interface Window {
@@ -59,7 +26,7 @@ declare global {
   }
 }
 
-enum OneTrustCookieCategory {
+enum OneTrustCookieCategory { //todo need?
   Analytics = 'ANA',
   Functional = 'FUN',
   Marketing = 'MAR',
@@ -80,7 +47,7 @@ async function prebootTylerWebApp(configPromise: Promise<any>) {
 // function to bridge from generic bootstrapping process into angular
 // bootstrap process
 async function bootstrapTylerAngular(bootstrapData: BootstrapParameters) {
-  const {config, identityFactory} = bootstrapData;
+  const { config, identityFactory } = bootstrapData;
 
   const configProvider: ValueProvider = {
     provide: APP_CONFIG,
@@ -112,9 +79,8 @@ async function bootstrapTylerAngular(bootstrapData: BootstrapParameters) {
     }
   };
 
-  // defineSpecificComponents
-  forgeComponents.forEach(define => define());
-  forgeInternalComponents.forEach(define => define());
+  defineComponents();
+  defineIcons();
 
   const bootstrap = () => platformBrowserDynamic(tokens).bootstrapModule(AppModule);
   let dataDogIsInitialized = false;
@@ -150,4 +116,4 @@ bootstrapTylerWebApp(
   bootstrapTylerAngular
 );
 
-// Generated on 09/08/2023 with Armored Armadillo 1.0.0-dev
+// Generated on 05/12/2023 with Armored Armadillo 1.0.0-dev

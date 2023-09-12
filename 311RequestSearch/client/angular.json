@@ -3,11 +3,13 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "311RequestSearch": {
+    "tyler-311-request-search": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "skipTests": true,
+          "displayBlock": true
         },
         "@schematics/angular:application": {
           "strict": true
@@ -32,7 +34,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "baseHref": "/app/new-application/",
+            "baseHref": "/requestsearch/request-search/",
             "aot": true,
             "progress": true,
             "outputPath": "build",
@@ -111,10 +113,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "311RequestSearch:build:production"
+              "browserTarget": "tyler-311-request-search:build:production"
             },
             "development": {
-              "browserTarget": "311RequestSearch:build:development"
+              "browserTarget": "tyler-311-request-search:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -122,7 +124,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "311RequestSearch:build"
+            "browserTarget": "tyler-311-request-search:build"
           }
         },
         "test": {
